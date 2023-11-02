@@ -1,4 +1,3 @@
-const { AuthenticationError } = require("apollo-server-express");
 const { User } = require("../models");
 
 const resolvers = {
@@ -11,7 +10,6 @@ const resolvers = {
                 
                 return user;
             }
-            throw new AuthenticationError("Must log in first!");
         }
     },
 
@@ -20,12 +18,10 @@ const resolvers = {
             const user = await User.findOne({ email });
             const token =signToken(user);
             if (!user) {
-                throw new AuthenticationError("Incorrect login")
             }
 
             const correctPassword = await user.isCorrectPassword(password)
             if (!correctPassword) {
-                throw new AuthenticationError("Incorrect login")
             }
 
             return { token, user }
@@ -49,7 +45,6 @@ const resolvers = {
             return user
             }
 
-            throw new AuthenticationError("You must be logged in")
         },
 
         removeBook: async (parent, { bookId }, context) => {
@@ -63,9 +58,8 @@ const resolvers = {
             return user
             }
 
-            throw new AuthenticationError("You must be logged in")
         }
     },
 };
 
-module.exports - resolvers;
+module.exports = resolvers;
